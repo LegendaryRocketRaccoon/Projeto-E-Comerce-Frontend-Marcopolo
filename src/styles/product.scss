@@ -519,3 +519,221 @@
   display: block;
   transform: translateZ(0);
 }
+
+/* ═══════════════════════════════════════════════════════
+   Adicione ao final de src/styles/auth.scss
+   ═══════════════════════════════════════════════════════ */
+
+.authError {
+  width: 100%;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: #fff0f0;
+  border-radius: 6px;
+  border-left: 3px solid #cc0000;
+  font-family: "Montserrat", system-ui;
+  font-size: 12px;
+  font-weight: 500;
+  color: #cc0000;
+  line-height: 1.4;
+}
+
+.reviewForm {
+  width: 100%;
+  max-width: 640px;
+  margin-bottom: 40px;
+}
+
+.reviewForm__login {
+  font-family: "Montserrat", system-ui;
+  font-size: 15px;
+  color: #555;
+}
+
+.reviewForm__loginLink {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 700;
+  color: #000;
+  text-decoration: underline;
+}
+
+.reviewForm__form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.reviewForm__stars {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.reviewForm__star {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: 2px;
+  font-size: 28px;
+  color: #ccc;
+  -webkit-text-stroke: 1px #888;
+  line-height: 1;
+  transition: color 0.1s, transform 0.08s;
+}
+
+.reviewForm__star.isActive {
+  color: #000;
+  -webkit-text-stroke: 0px transparent;
+}
+
+.reviewForm__star:active { transform: scale(0.9); }
+
+.reviewForm__ratingLabel {
+  font-family: "Montserrat", system-ui;
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+  margin-left: 6px;
+  min-width: 80px;
+}
+
+.reviewForm__commentBox {
+  width: 100%;
+}
+
+.reviewForm__comment {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid #e2e2e2;
+  border-radius: 10px;
+  background: #f9f9f9;
+  resize: vertical;
+  font-family: "Montserrat", system-ui;
+  font-size: 14px;
+  font-weight: 400;
+  color: #000;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.reviewForm__comment:focus { border-color: #000; }
+.reviewForm__comment::placeholder { color: #aaa; }
+
+.reviewForm__success {
+  padding: 8px 12px;
+  background: #f0fff4;
+  border-radius: 6px;
+  border-left: 3px solid #068100;
+  font-family: "Montserrat", system-ui;
+  font-size: 12px;
+  font-weight: 600;
+  color: #068100;
+}
+
+.reviewForm__actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.reviewForm__submit {
+  height: 44px;
+  padding: 0 28px;
+  border: 0;
+  border-radius: 10px;
+  background: #000;
+  color: #fff;
+  font-family: "Montserrat", system-ui;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.reviewForm__submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.reviewForm__delete {
+  height: 44px;
+  padding: 0 20px;
+  border: 1.5px solid #cc0000;
+  border-radius: 10px;
+  background: transparent;
+  color: #cc0000;
+  font-family: "Montserrat", system-ui;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.reviewForm__delete:hover { background: #cc0000; color: #fff; }
+.reviewForm__delete:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.reviewList {
+  width: 100%;
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 10px;
+}
+
+.reviewItem {
+  padding: 18px 20px;
+  background: #f5f5f5;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.reviewItem__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.reviewItem__author {
+  font-family: "Montserrat", system-ui;
+  font-size: 14px;
+  font-weight: 700;
+  color: #000;
+}
+
+.reviewItem__stars {
+  display: flex;
+  gap: 2px;
+}
+
+.reviewItem__star {
+  font-size: 15px;
+  color: #ccc;
+  -webkit-text-stroke: 1px #888;
+  line-height: 1;
+}
+
+.reviewItem__star.isFilled {
+  color: #000;
+  -webkit-text-stroke: 0px transparent;
+}
+
+.reviewItem__date {
+  font-family: "Montserrat", system-ui;
+  font-size: 12px;
+  color: #888;
+  margin-left: auto;
+}
+
+.reviewItem__comment {
+  font-family: "Montserrat", system-ui;
+  font-size: 14px;
+  font-weight: 400;
+  color: #333;
+  line-height: 1.5;
+}

@@ -11,11 +11,9 @@ function loadCart() {
   try { return JSON.parse(localStorage.getItem(CART_KEY)) ?? []; }
   catch { return []; }
 }
-
 function saveCart(cart) {
   try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch {}
 }
-
 function normSize(v) {
   if (v === null || v === undefined) return null;
   const s = String(v).trim();
@@ -29,45 +27,46 @@ function reducer(state, action) {
     case "SET_CART": return { ...state, cart: action.payload };
 
     case "ADD": {
-      const p    = action.payload;
-      const size = normSize(p.size);
-      const found = state.cart.find((x) => x.id === p.id && normSize(x.size) === size);
+      const { size } = action.payload;
+      const s = normSize(size);
+      const found = state.cart.find((x) => x.id === action.payload.id && normSize(x.size) === s);
       const cart = found
         ? state.cart.map((x) =>
-            x.id === p.id && normSize(x.size) === size ? { ...x, qty: (x.qty ?? 0) + 1 } : x)
-        : [...state.cart, { ...p, qty: 1, size }];
+            x.id === action.payload.id && normSize(x.size) === s
+              ? { ...x, qty: (x.qty ?? 0) + 1 } : x)
+        : [...state.cart, { ...action.payload, qty: 1, size: s }];
       return { ...state, cart };
     }
 
     case "REMOVE": {
       const { id, size } = action.payload;
-      return { ...state, cart: state.cart.filter((x) => !(x.id === id && normSize(x.size) === normSize(size))) };
+      return { ...state, cart: state.cart.filter(
+        (x) => !(x.id === id && normSize(x.size) === normSize(size))) };
     }
 
     case "QTY": {
       const { id, size, qty } = action.payload;
-      const q = Math.max(1, Number(qty) || 1);
       return { ...state, cart: state.cart.map((x) =>
-        x.id === id && normSize(x.size) === normSize(size) ? { ...x, qty: q } : x) };
+        x.id === id && normSize(x.size) === normSize(size)
+          ? { ...x, qty: Math.max(1, qty) } : x) };
     }
 
     case "SIZE": {
       const { id, fromSize, toSize } = action.payload;
-      const from = normSize(fromSize);
-      const to   = normSize(toSize);
+      const from = normSize(fromSize), to = normSize(toSize);
       if (from === to) return state;
       const idx = state.cart.findIndex((x) => x.id === id && normSize(x.size) === from);
       if (idx < 0) return state;
-      const current  = state.cart[idx];
+      const cur = state.cart[idx];
       const mergeIdx = state.cart.findIndex((x, i) => i !== idx && x.id === id && normSize(x.size) === to);
       if (mergeIdx >= 0) {
         const next = [...state.cart];
-        next[mergeIdx] = { ...next[mergeIdx], qty: (next[mergeIdx].qty ?? 0) + (current.qty ?? 0), size: to };
+        next[mergeIdx] = { ...next[mergeIdx], qty: (next[mergeIdx].qty ?? 0) + (cur.qty ?? 0), size: to };
         next.splice(idx, 1);
         return { ...state, cart: next };
       }
       const next = [...state.cart];
-      next[idx] = { ...current, size: to };
+      next[idx] = { ...cur, size: to };
       return { ...state, cart: next };
     }
 
@@ -77,7 +76,7 @@ function reducer(state, action) {
 }
 
 export function StoreProvider({ children }) {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch]   = useReducer(reducer, initialState);
   const [authUser, setAuthUser] = useState(() => api.getAuthUser());
   const isLoggedIn = Boolean(authUser);
 
@@ -119,7 +118,12 @@ export function StoreProvider({ children }) {
 
   const addToCart = useCallback((p) => {
     const size = normSize(p.size);
-    dispatch({ type: "ADD", payload: { id: p.id ?? p._id, _id: p._id ?? p.id, title: p.title, price: p.price, image: p.image ?? p.imageUrl, sizes: p.sizes ?? [], size } });
+    dispatch({ type: "ADD", payload: {
+      id: p.id ?? p._id, _id: p._id ?? p.id,
+      title: p.title, price: p.price,
+      image: p.image ?? p.imageUrl,
+      sizes: p.sizes ?? [], size,
+    }});
     if (isLoggedIn) api.addToCart(p.id ?? p._id, 1, size).catch(console.error);
   }, [isLoggedIn]);
 
@@ -137,8 +141,7 @@ export function StoreProvider({ children }) {
   }, [isLoggedIn]);
 
   const setSize = useCallback((id, fromSize, toSize) => {
-    const from = normSize(fromSize);
-    const to   = normSize(toSize);
+    const from = normSize(fromSize), to = normSize(toSize);
     if (from === to) return;
     const item = state.cart.find((x) => x.id === id && normSize(x.size) === from);
     dispatch({ type: "SIZE", payload: { id, fromSize: from, toSize: to } });
@@ -162,8 +165,10 @@ export function StoreProvider({ children }) {
     login, register, logout, setAuthUserFromGoogle,
     addToCart, removeFromCart, setQty, setSize, clearCart,
     cartCount, cartTotal,
-  }), [state, authUser, isLoggedIn, login, register, logout, setAuthUserFromGoogle,
-      addToCart, removeFromCart, setQty, setSize, clearCart, cartCount, cartTotal]);
+  }), [state, authUser, isLoggedIn,
+      login, register, logout, setAuthUserFromGoogle,
+      addToCart, removeFromCart, setQty, setSize, clearCart,
+      cartCount, cartTotal]);
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;
 }

@@ -1,475 +1,221 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { api } from "../services/api.js";
+import { useStore } from "../store.jsx";
+import { useAuthModal } from "../hooks/useAuthModal.js";
+import AuthModal from "../components/AuthModal.jsx";
 import "../styles/catalog.scss";
 import "../styles/auth.scss";
 
-// Drawer icons
-import drawerIcon from "../assets/drawer_icon.svg";
+import drawerIcon  from "../assets/drawer_icon.svg";
 import profileIcon from "../assets/iconamoon_profile-light.svg";
-import cartIcon from "../assets/lineicons_cart-1.svg";
-import searchIcon from "../assets/icon.svg";
-import googleIcon from "../assets/icon_google.svg"; 
-
-
-// flecha para filtros/orden
+import cartIcon    from "../assets/lineicons_cart-1.svg";
+import searchIcon  from "../assets/icon.svg";
 import vectorArrow from "../assets/Vector.svg";
 
 export default function Catalog() {
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading]   = useState(true);
 
-  // ===== SEARCH HEADER STATE / REFS =====
-  const [q, setQ] = useState("");
+  const { isLoggedIn, logout, authUser } = useStore();
+  const auth = useAuthModal();
+
+  const [q, setQ]                   = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
-  const searchInputRef = useRef(null);
-  const navigate = useNavigate();
-  const location = useLocation();
+  const searchInputRef              = useRef(null);
+  const navigate                    = useNavigate();
+  const location                    = useLocation();
 
-  // ✅ AUTH modal (igual Home)
-  const [authOpen, setAuthOpen] = useState(false);
-  const [authTab, setAuthTab] = useState("login"); // "login" | "register"
-  const authRef = useRef(null);
-
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-
-  // ===== FILTER / SORT =====
-  const [filterOpen, setFilterOpen] = useState(false);
-  const [sortOpen, setSortOpen] = useState(false);
+  const [filterOpen, setFilterOpen]     = useState(false);
+  const [sortOpen, setSortOpen]         = useState(false);
   const [activeCategory, setActiveCategory] = useState("Todos");
-  const [sortBy, setSortBy] = useState("Relevância");
+  const [sortBy, setSortBy]             = useState("Relevância");
+  const filterRef                       = useRef(null);
+  const sortRef                         = useRef(null);
 
-  const filterRef = useRef(null);
-  const sortRef = useRef(null);
-
-  // recent tags
   const recentTags = [
-    "Chuteira Adulto",
-    "Chuteira Infantil",
-    "Meião GMA",
-    "Luva Goleiro",
-    "Calça Térmica GMA",
-    "Feminino",
-    "Masculino",
+    "Chuteira Adulto", "Chuteira Infantil", "Meião GMA",
+    "Luva Goleiro", "Calça Térmica GMA", "Feminino", "Masculino",
   ];
 
   useEffect(() => {
     setLoading(true);
-    api
-      .getProducts()
-      .then((data) => setProducts(data))
-      .catch(console.error)
+    api.getProducts()
+      .then(setProducts).catch(console.error)
       .finally(() => setLoading(false));
   }, []);
 
-  // precargar q desde query param
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    const qParam = params.get("q") ?? "";
-    setQ(qParam);
+    setQ(params.get("q") ?? "");
   }, [location.search]);
 
-  // atajo Ctrl/Cmd + K y Escape
   useEffect(() => {
-    const handleShortcut = (e) => {
+    const handle = (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
-        e.preventDefault();
-        setSearchOpen(true);
-        setAuthOpen(false);
+        e.preventDefault(); setSearchOpen(true);
       }
       if (e.key === "Escape") {
-        setSearchOpen(false);
-        setFilterOpen(false);
-        setSortOpen(false);
-        setAuthOpen(false);
+        setSearchOpen(false); setFilterOpen(false);
+        setSortOpen(false); auth.closeAuth();
       }
     };
-    window.addEventListener("keydown", handleShortcut);
-    return () => window.removeEventListener("keydown", handleShortcut);
-  }, []);
+    window.addEventListener("keydown", handle);
+    return () => window.removeEventListener("keydown", handle);
+  }, [auth]);
 
-  // click outside: search header, drawer, dropdowns, modal
   useEffect(() => {
-    const handleClickOutside = (e) => {
-      // si click dentro del header/drawer/modal, no cerrar
+    if (!searchOpen && !filterOpen && !sortOpen && !auth.authOpen) return;
+    const handle = (e) => {
       if (e.target.closest(".searchHeader")) return;
       if (e.target.closest(".drawer")) return;
       if (e.target.closest(".authModal")) return;
-
       if (searchOpen) setSearchOpen(false);
-      if (authOpen) setAuthOpen(false);
-
-      // dropdowns
-      if (filterOpen && filterRef.current && !filterRef.current.contains(e.target)) {
-        setFilterOpen(false);
-      }
-      if (sortOpen && sortRef.current && !sortRef.current.contains(e.target)) {
-        setSortOpen(false);
-      }
+      if (auth.authOpen) auth.closeAuth();
+      if (filterOpen && filterRef.current && !filterRef.current.contains(e.target)) setFilterOpen(false);
+      if (sortOpen   && sortRef.current   && !sortRef.current.contains(e.target))   setSortOpen(false);
     };
+    document.addEventListener("click", handle);
+    return () => document.removeEventListener("click", handle);
+  }, [searchOpen, filterOpen, sortOpen, auth]);
 
-    if (!searchOpen && !filterOpen && !sortOpen && !authOpen) return;
-
-    document.addEventListener("click", handleClickOutside);
-    return () => document.removeEventListener("click", handleClickOutside);
-  }, [searchOpen, filterOpen, sortOpen, authOpen]);
-
-  // enfocar input cuando se abre searchHeader
   useEffect(() => {
-    if (searchOpen && searchInputRef.current) {
-      setTimeout(() => {
-        searchInputRef.current.focus();
-        if (searchInputRef.current.select) searchInputRef.current.select();
-      }, 80);
-    }
+    if (searchOpen) setTimeout(() => searchInputRef.current?.focus(), 80);
   }, [searchOpen]);
 
-  // enfocar email cuando abre modal
-  useEffect(() => {
-    if (!authOpen) return;
-    setTimeout(() => {
-      const el = authRef.current?.querySelector("input");
-      if (el) el.focus();
-    }, 220);
-  }, [authOpen, authTab]);
-
-  const toggleSearch = () => {
-    setSearchOpen((prev) => !prev);
-    setAuthOpen(false);
-  };
-
-  // navegar al catálogo con query param
   const goToCatalog = (query) => {
-    const qParam = query ?? "";
-    navigate(`/catalog?q=${encodeURIComponent(qParam)}`);
+    navigate(`/catalog?q=${encodeURIComponent(query ?? "")}`);
     setSearchOpen(false);
   };
 
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") goToCatalog(q);
+  const handleProfileClick = () => {
+    if (isLoggedIn) logout();
+    else auth.openAuth("login");
   };
 
-  const handleTagClick = (tag) => {
-    setQ(tag);
-    setTimeout(() => goToCatalog(tag), 0);
-  };
-
-  // ✅ open auth modal
-  const openAuth = (tab = "login") => {
-    setAuthTab(tab);
-    setAuthOpen(true);
-    setSearchOpen(false);
-    setFilterOpen(false);
-    setSortOpen(false);
-  };
-
-  // placeholder submit
-  const handleSubmitAuth = (e) => {
-    e.preventDefault();
-
-    // if (authTab === "register" && password !== confirmPassword) {
-    //   // TODO mostrar toast/erro
-    //   return;
-    // }
-
-    // if (authTab === "login") {
-    //   // TODO Firebase signInWithEmailAndPassword(auth, email, password)
-    // } else {
-    //   // TODO Firebase createUserWithEmailAndPassword(auth, email, password)
-    // }
-
-    alert(authTab === "login" ? `Login: ${email}` : `Cadastrar: ${email}`);
-  };
-
-  // categorías a partir del dataset
   const categories = useMemo(() => {
     const set = new Set(products.map((p) => p.category).filter(Boolean));
     return ["Todos", ...Array.from(set)];
   }, [products]);
 
-  // filtro + búsqueda (FRONT)
   const filtered = useMemo(() => {
-    const qNorm = q.trim().toLowerCase();
-
-    let arr = products;
-
-    if (activeCategory !== "Todos") {
-      arr = arr.filter((p) => (p.category ?? "") === activeCategory);
-    }
-
-    if (qNorm) {
-      arr = arr.filter((p) => (p.title ?? "").toLowerCase().includes(qNorm));
-    }
-
+    const qn = q.trim().toLowerCase();
+    let arr = activeCategory !== "Todos"
+      ? products.filter((p) => p.category === activeCategory)
+      : products;
+    if (qn) arr = arr.filter((p) => p.title.toLowerCase().includes(qn));
     return arr;
   }, [products, q, activeCategory]);
 
-  // orden (FRONT)
   const sorted = useMemo(() => {
     const arr = [...filtered];
     switch (sortBy) {
-      case "Menor preço":
-        arr.sort((a, b) => (a.price ?? 0) - (b.price ?? 0));
-        break;
-      case "Maior preço":
-        arr.sort((a, b) => (b.price ?? 0) - (a.price ?? 0));
-        break;
-      case "A-Z":
-        arr.sort((a, b) => String(a.title ?? "").localeCompare(String(b.title ?? "")));
-        break;
-      case "Z-A":
-        arr.sort((a, b) => String(b.title ?? "").localeCompare(String(a.title ?? "")));
-        break;
-      default:
-        break; // Relevância
+      case "Menor preço": arr.sort((a, b) => a.price - b.price); break;
+      case "Maior preço": arr.sort((a, b) => b.price - a.price); break;
+      case "A-Z": arr.sort((a, b) => a.title.localeCompare(b.title)); break;
+      case "Z-A": arr.sort((a, b) => b.title.localeCompare(a.title)); break;
     }
     return arr;
   }, [filtered, sortBy]);
 
-  const firstRow = sorted.slice(0, 4);
-  const rest = sorted.slice(4);
-
-  const restRows = useMemo(() => {
-    const out = [];
+  const firstRow  = sorted.slice(0, 4);
+  const restRows  = useMemo(() => {
+    const rest = sorted.slice(4), out = [];
     for (let i = 0; i < rest.length; i += 4) out.push(rest.slice(i, i + 4));
     return out;
-  }, [rest]);
+  }, [sorted]);
 
-  if (loading) {
-    return <div className="catalog__loading">Carregando catálogo...</div>;
-  }
+  if (loading) return <div className="catalog__loading">Carregando catálogo...</div>;
 
   return (
     <div className="catalog">
+
       {/* ===== SEARCH HEADER ===== */}
       <div className={`searchHeader ${searchOpen ? "isOpen" : ""}`}>
         <div className="searchHeader__bar">
           <img src={searchIcon} alt="" className="searchHeader__icon" />
-          <input
-            ref={searchInputRef}
-            className="searchHeader__input"
-            type="text"
-            placeholder="Buscar..."
-            value={q}
+          <input ref={searchInputRef} className="searchHeader__input" type="text"
+            placeholder="Buscar..." value={q}
             onChange={(e) => setQ(e.target.value)}
-            onKeyDown={handleKeyDown}
-            aria-label="Buscar productos"
-          />
+            onKeyDown={(e) => e.key === "Enter" && goToCatalog(q)}
+            aria-label="Buscar produtos" />
         </div>
-
         <div className="searchHeader__section">
           <div className="searchHeader__title">Mais buscados</div>
         </div>
-
         <div className="searchHeader__tags">
           {recentTags.map((t) => (
-            <button key={t} type="button" className="tag" onClick={() => handleTagClick(t)}>
-              {t}
-            </button>
+            <button key={t} type="button" className="tag"
+              onClick={() => { setQ(t); setTimeout(() => goToCatalog(t), 0); }}>{t}</button>
           ))}
         </div>
       </div>
 
-      {/* ✅ AUTH MODAL (Figma) */}
-      <div className={`authOverlay ${authOpen ? "isOpen" : ""}`} aria-hidden={!authOpen}>
-        <div
-          className={`authModal ${authOpen ? "isOpen" : ""}`}
-          role="dialog"
-          aria-modal="true"
-          aria-label="Login / Cadastrar"
-          ref={authRef}
-        >
-          <div className="authTabs">
-            <button
-              type="button"
-              className={`authTab ${authTab === "login" ? "isActive" : ""}`}
-              onClick={() => setAuthTab("login")}
-            >
-              Login
-            </button>
+      {/* ===== AUTH MODAL ===== */}
+      <AuthModal {...auth} />
 
-            <button
-              type="button"
-              className={`authTab ${authTab === "register" ? "isActive" : ""}`}
-              onClick={() => setAuthTab("register")}
-            >
-              Cadastrar
-            </button>
-          </div>
-
-          <div className="authUnderlineWrap">
-            <div className={`authUnderline ${authTab === "register" ? "isRegister" : "isLogin"}`} />
-          </div>
-
-          <form
-            className={`authForm ${authTab === "register" ? "isRegister" : ""}`}
-            onSubmit={handleSubmitAuth}
-          >
-            <div className="authForm__inner">
-              <div className="authGroup">
-                <div className="authLabel">E-mail</div>
-                <div className="authInputBox">
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Digitar..."
-                    aria-label="E-mail"
-                  />
-                </div>
-              </div>
-
-              <div className="authGroup">
-                <div className="authLabel">Senha</div>
-                <div className="authInputBox">
-                  <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="**********"
-                    aria-label="Senha"
-                  />
-                </div>
-              </div>
-
-              {authTab === "register" && (
-                <div className="authGroup">
-                  <div className="authLabel">Confirmar Senha</div>
-                  <div className="authInputBox">
-                    <input
-                      type="password"
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                      placeholder="**********"
-                      aria-label="Confirmar Senha"
-                    />
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <div className="authFooter">
-              <button className="authSubmit" type="submit">
-                {authTab === "login" ? "Entrar" : "Criar Conta"}
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-
-      {/* ===== TOP (1080) ===== */}
+      {/* ===== HERO ===== */}
       <section className="catalogHero">
         <div className="catalogHero__wrap">
           <div className="catalogHero__brand">po</div>
 
-          {/* drawer */}
           <nav className="drawer" aria-label="Ações rápidas">
             <button className="drawer__btn" type="button" aria-label="Menu">
               <img src={drawerIcon} alt="" />
             </button>
-
-            {/* ✅ PERFIL abre modal */}
-            <button
-              className="drawer__btn"
-              type="button"
-              aria-label="Perfil"
-              onClick={() => openAuth("login")}
-            >
-              <img src={profileIcon} alt="" />
+            <button className="drawer__btn" type="button"
+              aria-label={isLoggedIn ? "Sair" : "Entrar"}
+              title={isLoggedIn ? `Clique para sair (${authUser?.name ?? authUser?.email ?? ""})` : "Entrar / Cadastrar"}
+              onClick={handleProfileClick}>
+              <img src={profileIcon} alt=""
+                style={isLoggedIn ? { filter: "invert(35%) sepia(80%) saturate(400%) hue-rotate(100deg)" } : {}} />
             </button>
-
             <Link className="drawer__btn" to="/cart" aria-label="Carrinho">
               <img src={cartIcon} alt="" />
             </Link>
-
-            <button className="drawer__btn" type="button" aria-label="Buscar" onClick={toggleSearch}>
+            <button className="drawer__btn" type="button" aria-label="Buscar"
+              onClick={() => setSearchOpen((p) => !p)}>
               <img src={searchIcon} alt="" />
             </button>
           </nav>
 
           <div className="catalogHero__results">
-            <div className="catalogHero__hint">
-              Você buscou por “{q?.trim() ? q.trim() : "******"}”
-            </div>
+            <div className="catalogHero__hint">Você buscou por "{q?.trim() ? q.trim() : "******"}"</div>
             <div className="catalogHero__count">{sorted.length} Resultados</div>
           </div>
 
           <div className="catalogControls">
             <div className="catalogControls__group" ref={filterRef}>
-              <button
-                type="button"
+              <button type="button"
                 className={`catalogControls__btn ${filterOpen ? "isOpen" : ""}`}
-                onClick={() => {
-                  setFilterOpen((v) => !v);
-                  setSortOpen(false);
-                  setAuthOpen(false);
-                }}
-                aria-label="Filtrar por"
-              >
+                onClick={() => { setFilterOpen((v) => !v); setSortOpen(false); auth.closeAuth(); }}>
                 <span>Filtrar por</span>
-                <img
-                  src={vectorArrow}
-                  alt=""
-                  className={`catalogControls__arrow ${filterOpen ? "isOpen" : ""}`}
-                  aria-hidden="true"
-                />
+                <img src={vectorArrow} alt="" className={`catalogControls__arrow ${filterOpen ? "isOpen" : ""}`} />
               </button>
-
               {filterOpen && (
                 <div className="catalogControls__menu">
                   {categories.map((c) => (
-                    <button
-                      key={c}
-                      type="button"
+                    <button key={c} type="button"
                       className={`catalogControls__item ${activeCategory === c ? "isActive" : ""}`}
-                      onClick={() => {
-                        setActiveCategory(c);
-                        setFilterOpen(false);
-                      }}
-                    >
-                      {c}
-                    </button>
+                      onClick={() => { setActiveCategory(c); setFilterOpen(false); }}>{c}</button>
                   ))}
                 </div>
               )}
             </div>
 
             <div className="catalogControls__group" ref={sortRef}>
-              <button
-                type="button"
+              <button type="button"
                 className={`catalogControls__btn ${sortOpen ? "isOpen" : ""}`}
-                onClick={() => {
-                  setSortOpen((v) => !v);
-                  setFilterOpen(false);
-                  setAuthOpen(false);
-                }}
-                aria-label="Ordenar por"
-              >
+                onClick={() => { setSortOpen((v) => !v); setFilterOpen(false); auth.closeAuth(); }}>
                 <span>Ordenar por</span>
-                <img
-                  src={vectorArrow}
-                  alt=""
-                  className={`catalogControls__arrow ${sortOpen ? "isOpen" : ""}`}
-                  aria-hidden="true"
-                />
+                <img src={vectorArrow} alt="" className={`catalogControls__arrow ${sortOpen ? "isOpen" : ""}`} />
               </button>
-
               {sortOpen && (
                 <div className="catalogControls__menu">
                   {["Relevância", "Menor preço", "Maior preço", "A-Z", "Z-A"].map((s) => (
-                    <button
-                      key={s}
-                      type="button"
+                    <button key={s} type="button"
                       className={`catalogControls__item ${sortBy === s ? "isActive" : ""}`}
-                      onClick={() => {
-                        setSortBy(s);
-                        setSortOpen(false);
-                      }}
-                    >
-                      {s}
-                    </button>
+                      onClick={() => { setSortBy(s); setSortOpen(false); }}>{s}</button>
                   ))}
                 </div>
               )}
