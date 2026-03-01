@@ -1,0 +1,453 @@
+.catalog {
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #ffffff 0%, #e8e8e8 100%);
+}
+
+/* ===== LOADING ===== */
+.catalog__loading {
+  text-align: center;
+  padding: 60px 0;
+  font-size: 20px;
+  opacity: 0.75;
+  font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial;
+}
+
+/* ===== TOP 1080 ===== */
+.catalogHero {
+  width: 100%;
+}
+
+.catalogHero__wrap {
+  width: 100%;
+  max-width: 1920px;
+  height: 1080px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+}
+
+/* po */
+.catalogHero__brand {
+  position: absolute;
+  left: 157px;
+  top: 67px;
+
+  font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  font-size: 18px;
+  font-weight: 400;
+  color: #000;
+}
+
+/* texto centrado */
+.catalogHero__results {
+  position: absolute;
+  left: 50%;
+  top: 219px;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.catalogHero__hint {
+  font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  font-size: 22px;
+  font-weight: 400;
+  color: #818181;
+  text-align: center;
+}
+
+.catalogHero__count {
+  width: 324px;
+  font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  font-size: 48px;
+  font-weight: 400;
+  color: #818181;
+  text-align: center;
+}
+
+/* ===== CONTROLS ===== */
+.catalogControls {
+  position: absolute;
+  left: 169px;
+  top: 472px;
+  display: flex;
+  align-items: center;
+  gap: 70px;
+}
+
+.catalogControls__group {
+  position: relative;
+}
+
+.catalogControls__btn {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+
+  font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  font-size: 20px;
+  font-weight: 600;
+  color: #000;
+}
+
+/* NEW: arrow image (Vector.svg) */
+.catalogControls__arrow {
+  width: 15.38px;
+  height: 9.06px;
+  display: block;
+
+  transform: rotate(90deg); /* mismo “feeling” que tenías antes */
+  transform-origin: center;
+  transition: transform 0.18s ease;
+}
+
+.catalogControls__arrow.isOpen {
+  transform: rotate(0deg);
+}
+
+.catalogControls__menu {
+  position: absolute;
+  top: calc(100% + 14px);
+  left: 0;
+
+  min-width: 240px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 10px;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  z-index: 40;
+}
+
+.catalogControls__item {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+
+  text-align: left;
+  padding: 10px 12px;
+  border-radius: 12px;
+
+  font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  font-size: 16px;
+  font-weight: 600;
+  color: #000;
+}
+
+.catalogControls__item:hover {
+  background: #f1f1f1;
+}
+
+.catalogControls__item.isActive {
+  background: #e8e8e8;
+}
+
+/* ===== 1RA FILA dentro del bloque 1080 ===== */
+.catalogHero__row {
+  position: absolute;
+  left: 0;
+  top: 592px;
+
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 120px;
+  overflow: hidden;
+  padding: 0 40px;
+}
+
+/* ===== RESTO ===== */
+.catalogBody {
+  width: 100%;
+  max-width: 1920px;
+  margin: 0 auto;
+
+  padding-top: 20px;
+  padding-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.catalogBody__row {
+  width: 100%;
+  overflow: hidden;
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 120px;
+
+  padding: 0 40px;
+}
+
+/* ===== CARD (igual HOME) ===== */
+.card {
+  width: 316px;
+  height: 480px;
+  padding: 25px;
+  background: #fff;
+  border-radius: 20px;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  text-decoration: none;
+  color: #000;
+}
+
+.card__img {
+  width: 266px;
+  height: 255px;
+  border-radius: 20px;
+  align-self: center;
+  object-fit: contain;
+}
+
+.card__text {
+  height: 165px;
+  padding-top: 25px;
+  padding-bottom: 25px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.card__name {
+  width: 266px;
+  height: 38px;
+  text-align: center;
+
+  font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  font-size: 32px;
+  font-weight: 500;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card__price {
+  width: 206px;
+  text-align: center;
+
+  font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  font-size: 40px;
+  font-weight: 700;
+}
+
+/* ===== FOOTER BAR ===== */
+.footerbar {
+  width: 100%;
+  height: 60px;
+  background: #3d3d3d;
+}
+
+/* ===== DRAWER vertical ===== */
+.drawer {
+  position: absolute;
+  right: 60px;
+  top: 48px;
+
+  height: 331.33px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 65px;
+}
+
+.drawer__btn {
+  width: 33px;
+  height: 33px;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+
+  display: grid;
+  place-items: center;
+  text-decoration: none;
+}
+
+.drawer__btn img {
+  width: 33px;
+  height: 33px;
+  object-fit: contain;
+  display: block;
+  transform: translateZ(0);
+}
+
+/* ===== SEARCH HEADER ===== */
+.searchHeader {
+  position: fixed;
+  top: -350px;
+  left: 0;
+  width: 100%;
+  background: #fff;
+  padding: 60px 30px;
+  z-index: 1000;
+  transition: top 0.3s ease;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+
+  min-height: 300px;
+}
+
+.searchHeader.isOpen {
+  top: 0;
+}
+
+.searchHeader__bar {
+  width: 100%;
+  max-width: 600px;
+  height: 44px;
+  background: #e2e2e2;
+  border-radius: 20px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 15px;
+}
+
+.searchHeader__icon {
+  width: 17px;
+  height: 17px;
+}
+
+.searchHeader__input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+
+  font-family: "Montserrat", system-ui;
+  font-size: 14px;
+  font-weight: 600;
+  color: #000;
+
+  &::placeholder {
+    color: #818181;
+  }
+}
+
+.searchHeader__section {
+  font-family: "Montserrat", system-ui;
+  font-size: 16px;
+  font-weight: 600;
+  color: #818181;
+  text-align: center;
+  width: 100%;
+}
+
+.searchHeader__tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  max-width: 800px;
+}
+
+.tag {
+  background: #e2e2e2;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  border-radius: 20px;
+  padding: 6px 14px;
+
+  font-size: 15px;
+  font-family: "Montserrat", system-ui;
+  font-weight: 500;
+  color: #000;
+
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.08s ease;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.tag:hover {
+  background: #d0d0d0;
+}
+
+.tag:active {
+  transform: translateY(1px);
+}
+
+.tag:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.06);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1920px) {
+  .catalogHero__wrap,
+  .catalogBody {
+    width: 100%;
+  }
+}
+
+@media (max-width: 1100px) {
+  .catalogHero__wrap {
+    height: auto;
+    padding: 32px 18px 40px;
+  }
+
+  .catalogHero__brand,
+  .drawer,
+  .catalogHero__results,
+  .catalogControls,
+  .catalogHero__row {
+    position: static;
+    transform: none;
+  }
+
+  .drawer {
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 18px;
+    margin-top: 18px;
+    height: auto;
+  }
+
+  .catalogHero__results {
+    margin-top: 26px;
+    gap: 10px;
+  }
+
+  .catalogControls {
+    margin-top: 26px;
+    gap: 24px;
+  }
+
+  .catalogHero__row,
+  .catalogBody__row {
+    flex-wrap: wrap;
+    gap: 24px;
+    padding: 0;
+    margin-top: 26px;
+  }
+
+  .catalogBody {
+    padding: 20px 18px 30px;
+  }
+} 

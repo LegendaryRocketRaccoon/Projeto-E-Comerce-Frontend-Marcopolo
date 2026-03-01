@@ -1,0 +1,602 @@
+.cart {
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(180deg, white 0%, #e8e8e8 100%);
+}
+
+/* ===== HERO WRAP ===== */
+.cartHero__wrap {
+  width: 100%;
+  max-width: 1920px;
+  min-height: 1180px;
+  padding-bottom: 120px;
+  margin: 0 auto;
+  position: relative;
+  overflow: visible;
+  padding-top: 437px;
+}
+
+.cartHero__brand {
+  position: absolute;
+  left: 157px;
+  top: 67px;
+  font-family: "Montserrat", system-ui;
+  font-size: 18px;
+  font-weight: 400;
+  color: #000;
+}
+
+.drawer {
+  position: absolute;
+  right: 60px;
+  top: 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 65px;
+}
+
+.drawer__btn {
+  width: 33px;
+  height: 33px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.cartHero__titleBox {
+  position: absolute;
+  left: 50%;
+  top: 160px;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.cartHero__title {
+  font-family: "Montserrat", system-ui;
+  font-size: 48px;
+  font-weight: 400;
+  color: #818181;
+  text-align: center;
+}
+
+.cartHero__desc {
+  font-family: "Montserrat", system-ui;
+  font-size: 20px;
+  font-weight: 400;
+  color: #818181;
+  text-align: center;
+}
+
+/* ===== Layout lista + resumo ===== */
+.cartLayout {
+  position: relative;
+  width: calc(100% - 64px);
+  margin: 0 32px;
+  display: flex;
+  gap: 100px;
+  align-items: flex-start;
+  padding-bottom: 80px;
+}
+
+.cartList {
+  width: 1259px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.cartItem {
+  width: 1159px;
+  background: #fff;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.cartItem__inner {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 40px 100px; /* más aire */
+  min-height: 270px;   /* igual al figma */
+  gap: 40px;
+}
+
+.cartItem__img {
+  width: 211px;
+  height: 203px;
+  border-radius: 5px;
+  object-fit: contain;
+}
+
+.cartItem__info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+}
+
+.cartItem__name {
+  font-family: "Montserrat", system-ui;
+  font-size: 32px;
+  font-weight: 400; /* más ligero como figma */
+  color: #000;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cartItem__controls {
+  width: 265px;
+  display: flex;
+  align-items: center;
+  gap: 60px;
+}
+
+.cartItem__size {
+  width: 85px;
+  height: 42px;
+  background: #e2e2e2;
+  border: none;
+  border-radius: 10px;
+  padding: 0 12px;
+  font-family: "Montserrat", system-ui;
+  font-size: 20px;
+  font-weight: 600;
+  color: #000;
+  cursor: pointer;
+}
+
+.cartItem__qty {
+  width: 108px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cartItem__qtyBtn {
+  width: 46px;
+  height: 42px;
+  background: #e9e9e9;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: "Montserrat", system-ui;
+  font-size: 20px;
+  font-weight: 600;
+  color: #000;
+}
+
+.cartItem__qtyVal {
+  font-family: "Montserrat", system-ui;
+  font-size: 20px;
+  font-weight: 600;
+  color: #000;
+}
+
+.cartItem__price {
+  width: 220px;
+  text-align: right;
+  font-size: 40px;
+  font-family: "Numans", system-ui;
+  font-weight: 400;
+  word-wrap: break-word;
+  color: #000;
+
+  /* subrayado tipográfico más visible */
+  text-decoration-line: underline;
+  text-decoration-thickness: 2px;
+  text-decoration-color: #000;
+  text-underline-offset: 6px;
+  padding-bottom: 4px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ===== RESUMO ===== */
+.cartSummary {
+  width: 535px;
+  height: 535px;
+  background: #fff;
+  border-radius: 15px;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.cartSummary__top {
+  padding: 50px;
+  display: flex;
+  justify-content: flex-start; /* ✅ ya no reservamos espacio para la derecha */
+  align-items: flex-start;
+  gap: 40px;
+}
+
+.cartSummary__left {
+  width: 100%;
+}
+
+.cartSummary__title {
+  font-family: "Lexend Zetta", "Montserrat", system-ui;
+  padding-bottom: 70px;
+  font-size: 40px;
+  font-weight: 500;
+  color: #000;
+}
+
+
+/* ✅ OCULTA el total al lado de "Resumo" SIN tocar el JSX */
+.cartSummary__right,
+.cartSummary__value {
+  display: none !important;
+}
+
+.cartSummary__divider {
+  width: 485px;
+  height: 4px;
+  background: #e2e2e2;
+  border-radius: 100px;
+  margin: 0 auto;
+}
+
+/* ===== BODY ===== */
+.cartSummary__body {
+  padding: 40px 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* ===========================
+   ✅ ITEMS como el TOTAL
+   (aside que pasaste)
+=========================== */
+
+/* Fila item: qty izq, precio der */
+.cartSummary__itemRow {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+}
+
+/* Qty izq */
+.cartSummary__itemQty {
+  font-family: "Lexend Zetta", "Montserrat", system-ui !important;
+  font-size: 22px !important;
+  font-weight: 500 !important;
+  color: #000;
+}
+
+/* Precio der: mismo tamaño para R$ y número porque es 1 solo nodo */
+.cartSummary__itemPrice {
+  font-family: "Lexend Zetta", "Montserrat", system-ui !important;
+  font-size: 22px !important;      /* ✅ mismo tamaño R$ + valor */
+  font-weight: 500 !important;     /* ✅ un poquito más grueso */
+  color: #000;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* Row for each product group in the summary: qty on left, unit price on right */
+.cartSummary__itemRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* quantity / label for the row */
+.cartSummary__itemQty {
+  font-family: "Numans", system-ui;
+  font-size: 20px;
+  font-weight: 400;
+  color: #000;
+}
+
+/* price for the row (individual item price), subrayado tipográfico */
+.cartSummary__itemPrice {
+  font-family: "Numans", system-ui;
+  font-size: 20px;
+  font-weight: 400;
+  color: #000;
+  text-decoration-line: underline;
+  text-decoration-thickness: 2px;
+  text-decoration-color: #000;
+  text-underline-offset: 4px;
+}
+
+/* right column in top (keeps the overall cart total value) */
+.cartSummary__right {
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
+.cartSummary__value {
+  font-family: "Numans", system-ui; /* tipografía figma */
+  font-size: 24px;
+  font-weight: 400;
+  color: #000;
+  text-align: right;
+}
+
+.cartSummary__divider {
+  width: 485px;
+  height: 4px;
+  background: #e2e2e2;
+  border-radius: 100px;
+  margin: 0 auto;
+}
+
+.cartSummary__body {
+  padding: 40px 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.cartSummary__label {
+  font-family: "Numans", system-ui;
+  font-size: 40px;
+  font-weight: 400;
+  color: #000;
+}
+
+/* fila total: label y valor alineados a extremos */
+.cartSummary__totalRow {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+}
+
+
+
+
+
+
+
+
+
+
+.cartSummary__label {
+  font-family: "Lexend Zetta", "Montserrat", system-ui;
+  font-size: 40px;
+  font-weight: 500;
+  color: #000;
+}
+
+/* Contenedor del precio total */
+.cartSummary__totalValue {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+
+  padding-bottom: 12px;
+  font-family: "Lexend Zetta", "Montserrat", system-ui;
+  font-size: 40px;   /* ✅ tamaño base */
+  font-weight: 600;
+  color: #000;
+  white-space: nowrap;
+}
+/* moneda pequeña si la quieres separada */
+.cartSummary__currency {
+  font-size: inherit;  /* ✅ igual que el valor */
+  font-weight: 650;    /* ✅ un poco más grueso */
+  color: #000;
+}
+
+/* underline for the big total number */
+.cartSummary__totalUnderline {
+  font-size: inherit;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* checkout button */
+.cartSummary__checkout {
+  margin-top: 8px;
+  height: 60px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+
+  background: #000000;
+  color: #fff;
+  font-family: "Lexend Zetta", "Montserrat", system-ui;
+  font-size: 22px;
+  font-weight: 200;
+}
+
+
+/* clear button (kept if needed) */
+.cartSummary__clear {
+  height: 44px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+
+  background: #e2e2e2;
+  color: #000;
+  font-family: "Montserrat", system-ui;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ===== EMPTY ===== */
+.cartEmpty {
+  position: absolute;
+  left: 50%;
+  top: 460px;
+  transform: translateX(-50%);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: center;
+}
+
+.cartEmpty__text {
+  font-family: "Lexend Zetta", "Montserrat", system-ui;
+  font-size: 18px;
+  color: #818181;
+}
+
+.cartEmpty__btn {
+  height: 50px;
+  padding: 15px 22px;
+  border-radius: 12px;
+  background: #3d3d3d;
+  color: #fff;
+  font-family: "Montserrat", system-ui;
+  font-weight: 700;
+}
+
+/* ===== FOOTER BAR ===== */
+.footerbar {
+  width: 100%;
+  height: 60px;
+  background: #3d3d3d;
+}
+
+/* ===== TOAST ===== */
+.cart__toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #3d3d3d;
+  color: #fff;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  z-index: 9999;
+  animation: fadeInOut 4s forwards;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translateY(20px); }
+  10% { opacity: 1; transform: translateY(0); }
+  90% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(20px); }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1500px) {
+  .cartLayout { gap: 40px; }
+
+  .cartList {
+    width: 100%;
+    max-width: 900px;
+  }
+
+  .cartItem,
+  .cartItem__inner {
+    width: 100%;
+  }
+
+  .cartSummary { width: 420px; }
+}
+
+@media (max-width: 1100px) {
+  .cartHero__wrap {
+    min-height: auto;
+    padding: 32px 18px 60px;
+    padding-top: 0;
+  }
+
+  .cartHero__brand,
+  .drawer,
+  .cartHero__titleBox,
+  .cartLayout {
+    position: static;
+    transform: none;
+  }
+
+  .drawer {
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 18px;
+    margin-top: 18px;
+    height: auto;
+  }
+
+  .cartLayout {
+    margin-top: 28px;
+    flex-direction: column;
+    width: 100%;
+    gap: 24px;
+    padding-bottom: 40px;
+    margin: 0;
+  }
+
+  .cartList { width: 100%; }
+
+  .cartItem__inner {
+    padding: 20px;
+    gap: 18px;
+    min-height: 160px; /* ajustado móvil */
+  }
+
+  .cartItem__img {
+    width: 120px;
+    height: 120px;
+  }
+
+  .cartItem__price {
+    width: auto;
+    font-size: 24px;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
+  }
+
+  .cartSummary {
+    width: 100%;
+    height: auto;
+  }
+
+  .cartSummary__divider {
+    width: calc(100% - 40px);
+  }
+
+  /* ✅ responsive summary */
+  .cartSummary__label { font-size: 18px; }
+  .cartSummary__totalValue { font-size: 18px; }
+  .cartSummary__itemQty { font-size: 16px; }
+  .cartSummary__itemPrice { font-size: 16px; }
+}

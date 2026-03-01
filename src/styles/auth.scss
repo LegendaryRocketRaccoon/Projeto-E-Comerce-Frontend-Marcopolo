@@ -1,0 +1,381 @@
+/* ============================
+   AUTH POPUP (Login/Register)
+   ============================ */
+
+.authOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2500;
+
+  background: rgba(0, 0, 0, 0.18);
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  transition: opacity 0.22s ease, visibility 0.22s ease;
+}
+
+.authOverlay.isOpen {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* Modal: centrado fijo, pero “escondido arriba” por transform */
+.authModal {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+
+  width: 380px;
+  border-radius: 15px;
+  background: #fff;
+  overflow: hidden;
+
+  /* escondido arriba (fuera de pantalla) */
+  transform: translate(-50%, -50%) translateY(calc(-50vh - 140px));
+  opacity: 0;
+
+  transition: transform 0.38s cubic-bezier(0.2, 0.9, 0.2, 1),
+              opacity 0.22s ease;
+
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+  will-change: transform, opacity;
+}
+
+.authModal.isOpen {
+  transform: translate(-50%, -50%) translateY(0);
+  opacity: 1;
+}
+
+/* padding general (más respiración) */
+.authTabs,
+.authUnderlineWrap {
+  padding-left: 18px;
+  padding-right: 18px;
+}
+
+/* Tabs (Figma) */
+.authTabs {
+  height: 64px;
+  width: 100%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 120px;
+}
+
+.authTab {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+
+  font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  font-size: 13px;
+  font-weight: 500;
+
+  color: #9e9e9e;
+  padding: 0 0 18px;
+
+  transition: color 0.15s ease;
+}
+
+.authTab.isActive {
+  color: #000;
+}
+
+/* underline (Figma) */
+.authUnderlineWrap {
+  height: 17px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.authUnderline {
+  width: 326px;
+  height: 1px;
+  border-radius: 100px;
+}
+
+.authUnderline.isLogin {
+  background: linear-gradient(90deg, #000 0%, #b5b5b5 100%);
+}
+
+.authUnderline.isRegister {
+  background: linear-gradient(90deg, #b5b5b5 0%, #000 100%);
+}
+
+/* Form wrapper */
+.authForm {
+  display: flex;
+  flex-direction: column;
+}
+
+/* inner base */
+.authForm__inner {
+  width: 326px;
+  
+  margin: 0 auto;
+
+  padding: 10px; /* Figma: padding 10 */
+  padding-bottom: 35px;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ✅ LOGIN: height 201 (Figma) */
+.authForm:not(.isRegister) .authForm__inner {
+  height: 201px;
+  gap: 0; /* Figma: solo grupos + forgot separado (wrapper) */
+}
+
+/* ✅ REGISTER: height 270 (Figma) */
+.authForm.isRegister .authForm__inner {
+  height: 270px;
+  gap: 0;
+}
+
+/* Field group (Figma) */
+.authGroup {
+  align-self: stretch;
+  height: 86px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+/* separación vertical entre grupos (Figma usa bloques separados) */
+.authGroup + .authGroup {
+  margin-top: 10px;
+}
+
+.authLabel {
+  color: #000;
+  font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* input box (Figma) */
+.authInputBox {
+  align-self: stretch;
+  height: 37px;
+  background: #e2e2e2;
+  border-radius: 5px;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+}
+
+.authInputBox input {
+  width: 100%;
+  height: 37px;
+
+  border: 0;
+  outline: none;
+  background: transparent;
+
+  padding: 0 15px;
+
+  font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  font-size: 10px;
+  font-weight: 500;
+  color: #000;
+}
+
+.authInputBox input::placeholder {
+  color: #818181;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+/* ✅ Forgot password (Figma: wrapper con padding 10) */
+.authForgotWrap {
+  width: 326px;
+  margin: 0 auto;
+
+  padding: 10px;
+  overflow: hidden;
+
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.authForgot {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  
+
+  font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  font-size: 15px;
+  font-weight: 500;
+  color: #61a5c3;
+  text-decoration: underline;
+
+  transition: opacity 0.15s ease, transform 0.08s ease;
+}
+
+.authForgot:active {
+  transform: translateY(1px);
+}
+
+/* ✅ Footer (Figma: columna, gap 25, padding L/R 10) */
+.authFooter {
+  align-self: stretch;
+
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 30px;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+}
+
+/* Botón Google (Figma) */
+.authGoogleBtn {
+  width: 304px;
+  height: 45px;
+
+  padding-left: 17px;
+  padding-right: 17px;
+  padding-top: 9px;
+  padding-bottom: 9px;
+
+  background: #e2e2e2;
+  border: 0;
+  border-radius: 0; /* en figma no aparece radius */
+
+  overflow: hidden;
+
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+
+  cursor: pointer;
+
+  font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  font-size: 15px;
+  font-weight: 500;
+  color: #000;
+
+  transition: transform 0.08s ease, opacity 0.15s ease;
+}
+
+.authGoogleBtn:active {
+  transform: translateY(1px);
+}
+
+.authGoogleBtn__icon {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+/* Submit (Figma) */
+.authSubmit {
+  width: 304px;
+  height: 45px;
+
+  padding: 10px;
+
+  border: 0;
+  border-radius: 10px;
+  background: #000;
+
+  color: #fff;
+  font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  font-size: 16px;
+  font-weight: 500;
+
+  cursor: pointer;
+  transition: transform 0.08s ease, opacity 0.15s ease;
+}
+
+.authSubmit:active {
+  transform: translateY(1px);
+}
+
+/* Mobile */
+@media (max-width: 420px) {
+  .authModal {
+    width: calc(100% - 24px);
+  }
+
+  .authUnderline,
+  .authForm__inner,
+  .authForgotWrap,
+  .authGoogleBtn,
+  .authSubmit {
+    width: calc(100% - 24px);
+  }
+
+  .authTabs {
+    gap: 80px;
+  }
+}
+
+/* Accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+  .authOverlay,
+  .authModal {
+    transition: none !important;
+  }
+}
+
+
+/* ===== FIX: "Esqueci minha senha." no se corta ===== */
+.authForm:not(.isRegister) .authForm__inner {
+  overflow: visible; /* deja que el link salga sin recorte */
+}
+
+/* por si algún padre también estaba cortando */
+.authForm:not(.isRegister) {
+  overflow: visible;
+}
+
+/* asegura que el botón/link tenga altura real */
+.authForgotWrap {
+  overflow: visible;
+  height: auto;
+  min-height: 0;
+  padding-bottom: 10px; /* aire para que no quede pegado */
+}
+
+.authForgot {
+  display: inline-block;
+  line-height: 1.2; /* evita que parezca "cortado" */
+}
+
+.authError {
+  width: 100%;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: #fff0f0;
+  border-radius: 6px;
+  border-left: 3px solid #cc0000;
+
+  font-family: "Montserrat", system-ui;
+  font-size: 12px;
+  font-weight: 500;
+  color: #cc0000;
+  line-height: 1.4;
+}
