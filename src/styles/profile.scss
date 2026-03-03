@@ -1,0 +1,640 @@
+/* ============================
+   PROFILE (Figma)
+   ============================ */
+
+.profileOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2400;
+  background: rgba(0, 0, 0, 0.18);
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.22s ease, visibility 0.22s ease;
+}
+
+.profileOverlay.isOpen {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.profileModal {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+
+  opacity: 0;
+  transform: translate(-50%, -50%) translateY(calc(-50vh - 140px));
+  transition: transform 0.38s cubic-bezier(0.2, 0.9, 0.2, 1), opacity 0.22s ease;
+  will-change: transform, opacity;
+
+  width: min(1300px, calc(100vw - 24px));
+  max-height: calc(100vh - 24px);
+}
+
+.profileModal.isOpen {
+  opacity: 1;
+  transform: translate(-50%, -50%) translateY(0);
+}
+
+.profileCard {
+  width: 100%;
+  background: #fff;
+  border-radius: 15px;
+
+  /* ✅ IMPORTANTE: el recorte lo maneja el padding, no el card */
+  overflow: hidden;
+
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  height: auto;
+  max-height: calc(100vh - 24px);
+}
+
+/* inner padding: 120 / height: 673 */
+.profileCard__pad {
+  align-self: stretch;
+
+  height: auto;
+  width: 1380px !important;
+  max-height: calc(100vh - 24px - 110px);
+
+  /* ✅ en pantallas chicas: scroll interno para que NUNCA se corte */
+  overflow-y: hidden;
+  overflow-x: hidden;
+
+  padding: 120px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* =========================
+   PROFILE VIEW (grid)
+   ========================= */
+
+.profileGrid {
+  align-self: stretch;
+  height: auto;
+
+  overflow: visible;
+
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+/* Left */
+.profileLeft {
+  width: 753px;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 60px;
+}
+
+.profileHello {
+  width: 660px;
+  height: 150px;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 15px;
+}
+
+.profileHello__text {
+  color: #bababa;
+  font-size: 36px;
+  font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  font-style: italic;
+  font-weight: 500;
+  word-wrap: break-word;
+}
+
+.profileFields {
+  width: 600px;
+  height: auto;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 30px;
+}
+
+.profileField {
+  align-self: stretch;
+  padding: 10px 20px;
+  background: #e2e2e2;
+  border-radius: 0;
+
+  /* ✅ el input no necesita que esto recorte */
+  overflow: hidden;
+
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ✅ input real (editable) */
+.profileField__input {
+  width: 100%;
+  border: 0;
+  outline: none;
+  background: transparent;
+
+  color: #000;
+  font-size: 20px;
+  font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  font-weight: 600;
+}
+
+.profileField__input::placeholder {
+  color: #bababa;
+  font-weight: 600;
+}
+
+/* Right */
+.profileRight {
+  flex: 1 1 0;
+  align-self: stretch;
+
+  /* ✅ NO recortes aquí: los iconos/labels deben poder respirar */
+  overflow: visible;
+
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.profileRight__titleWrap {
+  align-self: stretch;
+  height: 200px;
+
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.profileRight__title {
+  color: #000;
+  font-size: 20px;
+  font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  font-weight: 900;
+  word-wrap: break-word;
+}
+
+/* ✅ aquí estaba el gran corte: height fija + overflow hidden */
+.profileRight__body {
+  align-self: stretch;
+  height: 354px;
+
+  /* ✅ deja visible para que labels no se corten */
+  overflow: visible;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+}
+
+/* ICONS row */
+.profileIconsRow {
+  align-self: stretch;
+  height: 50px;
+
+  /* ✅ no cortar iconos */
+  overflow: visible;
+
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 100px;
+
+  /* ✅ un poquito más arriba */
+  padding-top: 6px;
+}
+
+/* Base iconBox */
+.iconBox {
+  align-self: stretch;
+
+  /* ✅ no cortar svg */
+  overflow: visible;
+
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ✅ ICONOS COMO BOTONES */
+.iconBoxBtn {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+
+  /* ✅ si el navegador mete padding por defecto */
+  padding: 0;
+
+  /* ✅ no recortar */
+  overflow: visible;
+
+  /* ✅ saca outline feo */
+  outline: none;
+}
+
+.iconBoxBtn:active {
+  transform: translateY(1px);
+}
+
+/* Figma paddings y tamaños por estado */
+.iconBox--confirmed {
+  width: 80px;
+  padding: 15px 7px;
+}
+
+.iconBox--preparing {
+  width: 76px;
+  padding: 9px 11px;
+  justify-content: flex-end;
+}
+
+.iconBox--shipping {
+  width: 80px;
+  padding: 10px 0;
+}
+
+/* Imágenes */
+.iconImg {
+  display: block;
+  object-fit: contain;
+  scale: 0.8;
+  /* ✅ nada de scale aquí: a veces se sale y recorta */
+  transform: none;
+}
+
+/* tamaños (ajusta si tus svg son distintos) */
+.iconImg--confirmed { width: 75px; height: 75px; }
+.iconImg--preparing { width: 52px; height: 52px; }
+.iconImg--shipping  { width: 72px; height: 50px; }
+
+/* LABELS row (debajo, centrados, sin corte) */
+.profileLabelsRow {
+  align-self: stretch;
+
+  display: inline-flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 80px;
+
+  margin-top: 10px;
+
+  /* ✅ evita que el texto "choque" con recortes */
+  padding-bottom: 6px;
+}
+
+.profileLabel {
+  color: #000;
+  font-size: 16px;
+  font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  font-weight: 700;
+  word-wrap:normal;
+
+  width: 98px;
+  text-align: center;
+
+  /* ✅ si el texto fuese más largo, que no se corte */
+  white-space: normal;
+}
+
+/* Bottom buttons row */
+.profileActions {
+  align-self: stretch;
+  flex: 0 0 auto;
+
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 80px;
+
+  padding: 20px;
+  padding-top: 0;
+}
+
+.profileBtn {
+  height: 61px;
+  padding: 0 30px;
+  border-radius: 15px;
+  overflow: hidden;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+
+  font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  font-size: 20px;
+  font-weight: 700;
+
+  cursor: pointer;
+  border: 0;
+}
+
+.profileBtn--ghost {
+  background: transparent;
+  outline: 2px #424242 solid;
+  outline-offset: -2px;
+  color: #424242;
+}
+
+.profileBtn--solid {
+  width: 154px;
+  background: #424242;
+  color: #fff;
+}
+
+.profileBtn--ok {
+  width: 154px;
+}
+
+/* =========================
+   ORDERS VIEW (Figma 2)
+   ========================= */
+
+.ordersView {
+  align-self: stretch;
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  height: 553px;
+  overflow: hidden;
+}
+
+.ordersHead {
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.ordersHead__title {
+  color: #000;
+  font-size: 36px;
+  font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  font-weight: 900;
+  word-wrap: break-word;
+}
+
+.ordersHead__sub {
+  color: #000;
+  font-size: 16px;
+  font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  font-weight: 500;
+  word-wrap: break-word;
+  margin-top: 6px;
+}
+
+.ordersList {
+  align-self: stretch;
+  height: 298px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 15px;
+
+  overflow: hidden;
+}
+
+.orderItem {
+  align-self: stretch;
+  flex: 1 1 0;
+
+  padding-left: 50px;
+  padding-right: 65px;
+
+  overflow: hidden;
+  border-radius: 5px;
+  outline: 2px #d8d8d8 solid;
+  outline-offset: -2px;
+
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.orderItem__left {
+  width: 1008px;
+  align-self: stretch;
+
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 20px;
+}
+
+.orderItem__img {
+  width: 87px;
+  height: 87px;
+  padding: 10px;
+  object-fit: cover;
+  display: block;
+}
+
+.orderItem__mid {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.orderItem__name {
+  color: #000;
+  font-size: 16px;
+  font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  font-weight: 700;
+  word-wrap: break-word;
+}
+
+.orderItem__meta {
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 50px;
+}
+
+.orderItem__metaText {
+  color: #555;
+  font-size: 13px;
+  font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  font-weight: 500;
+  word-wrap: break-word;
+}
+
+.orderItem__codeWrap {
+  flex: 1 1 0;
+  align-self: stretch;
+  padding-top: 30px;
+  padding-bottom: 30px;
+
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.orderItem__code {
+  color: #bababa;
+  font-size: 13px;
+  font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  font-weight: 600;
+  word-wrap: break-word;
+}
+
+.orderItem__right {
+  width: 181px;
+  align-self: stretch;
+
+  padding: 15px 7px;
+
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Placeholder del iconito derecho (lo conectas luego) */
+.orderRightIcon {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.orderRightIcon__a {
+  width: 22.17px;
+  height: 16.63px;
+  background: #fff;
+  outline: 2px #fff solid;
+  outline-offset: -1px;
+}
+
+.orderRightIcon__b {
+  width: 26.6px;
+  height: 26.6px;
+  background: #000;
+  margin-top: 6px;
+}
+
+/* =========================
+   Desktop grande = Figma fijo
+   ========================= */
+@media (min-width: 1200px) and (min-height: 900px) {
+  .profileCard__pad {
+    height: 673px;
+    max-height: none;
+    overflow: hidden;
+  }
+
+  /* ✅ en desktop grande, mantenemos las alturas Figma sin cortar iconos */
+  .profileRight__body {
+    overflow: visible;
+  }
+
+  .profileIconsRow {
+    overflow: visible;
+  }
+}
+
+/* Mobile */
+@media (max-width: 980px) {
+  .profileCard__pad {
+    padding: 24px;
+    max-height: calc(100vh - 24px - 110px);
+  }
+
+  .profileGrid {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .profileLeft,
+  .profileHello,
+  .profileFields {
+    width: 100%;
+  }
+
+  .profileActions {
+    gap: 18px;
+  }
+
+  .profileBtn {
+    width: 100%;
+  }
+
+  .profileBtn--solid,
+  .profileBtn--ok {
+    width: 100%;
+  }
+
+  .profileLabelsRow {
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .profileIconsRow {
+    gap: 40px;
+    height: auto;
+  }
+
+  .ordersView {
+    height: auto;
+    overflow: visible;
+  }
+
+  .ordersList {
+    height: auto;
+    overflow: visible;
+  }
+
+  .orderItem {
+    padding-left: 16px;
+    padding-right: 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .orderItem__left {
+    width: 100%;
+  }
+
+  .orderItem__right {
+    width: 100%;
+    align-self: flex-start;
+    padding: 10px 0;
+  }
+}
